@@ -25,7 +25,7 @@ class MixerTest extends Demo {
 
   MixerTest(this._ballFixture)
       : _rnd = new math.Random(),
-        super("Mixer test", new Vector2(0.0, -20.0), 5.0);
+        super("Mixer test", new Vector2(0.0, -30.0), 5.0);
 
 
   @override
@@ -88,20 +88,22 @@ class MixerTest extends Demo {
   @override
   void step(num timeStamp) {
 
+    var delta = timeStamp - _lastUpdate;
+    _lastUpdate = timeStamp;
+
     if (elapsedUs != null) {
 
       if (elapsedUs <= 6000) {
         _fastFrameCount++;
-      } else {
-        _fastFrameCount = 0;
       }
 
-      if (elapsedUs >= 7000) {
-        print("boo! - $elapsedUs");
-        if (_bouncers.isNotEmpty) {
-          world.destroyBody(_bouncers.removeLast());
+      if (elapsedUs >= 7000 || delta > 18) {
+        print("Boo!\tStep time: $elapsedUs\tFrame time: $delta");
+        _fastFrameCount = 0;
+        if (_bouncers.length > 10) {
+          world.destroyBody(_bouncers.removeAt(0));
         }
-      } else if (_fastFrameCount >= 3) {
+      } else if (_fastFrameCount >= 5) {
         _fastFrameCount = 0;
         _addFallingThing();
       }
@@ -116,13 +118,11 @@ class MixerTest extends Demo {
   }
 
   void _addFallingThing() {
-    var xPos = _rnd.nextDouble() * 5 - 2.5;
-
     var bd2 = new BodyDef()
         ..type = BodyType.DYNAMIC
-        ..position = new Vector2(0.0, 40 + xPos);
+        ..position = new Vector2(0.0, 40.0);
 
-    bd2.linearVelocity = new Vector2(25.0, 0.0);
+    bd2.linearVelocity = new Vector2(35.0, 0.0);
 
     var ball = world.createBody(bd2)
         ..createFixture(_ballFixture);
@@ -138,7 +138,7 @@ void main() {
 
   var ballFixtureDef = new FixtureDef()
       ..shape = psd
-      ..density = 20.0
+      ..density = 10.0
       ..friction = 0.9
       ..restitution = 0.95;
 
