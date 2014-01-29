@@ -26,7 +26,7 @@ abstract class Demo {
   List<Body> bodies = new List<Body>();
 
   /** The default canvas width and height. */
-  static const int CANVAS_WIDTH = 900;
+  static const int CANVAS_WIDTH = 600;
   static const int CANVAS_HEIGHT = 600;
 
   /** Scale of the viewport. */
