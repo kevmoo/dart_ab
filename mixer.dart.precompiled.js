@@ -319,13 +319,13 @@ z=new V.TM(new T.z3(new Float32Array(2)),0,0)
 z.jn=1
 y=V.DY()
 y.v9=z
-y.yD=20
+y.yD=10
 y.f1=0.9
 y.Zh=0.95
 x=H.VM([],[V.qR])
 w=new Float32Array(2)
 w[0]=0
-w[1]=-20
+w[1]=-30
 v=H.VM([],[V.qR])
 u=new V.kn(null,null,null)
 u.CW()
@@ -340,7 +340,7 @@ w=w.gRx(w)
 C.ol.hr(u)
 C.ol.oB(u,W.VF(w))},"call$0","eE",0,0,0],
 N3:{
-"":"Op;KP,xG,At,q2,vp,Ij,JK,zT,Iu,qN,Ee,wq,lp,dd,Tr,GQ,QQ",
+"":"Op;KP,xG,At,ni,vp,Ij,JK,zT,Iu,qN,Ee,wq,lp,dd,Tr,GQ,QQ",
 eQ:function(a){var z,y,x,w,v,u,t,s,r,q,p,o
 V.kw().q8(50,0.4)
 z=V.mW().bM.Ev
@@ -389,26 +389,25 @@ o.B2=100000000
 o.nk=!0
 z.MN(o)},
 ha:[function(a,b){var z,y,x,w
-z=this.GQ
-if(z!=null){if(typeof z!=="number")return z.E()
-if(z<=6000){y=this.At+1
-this.At=y}else{this.At=0
-y=0}if(z>=7000){P.JS("boo! - "+H.d(z))
-z=this.vp
-y=z.length
-if(y!==0){if(0>=y)return H.e(z,0)
-this.JK.SB(z.pop())}}else if(y>=3){this.At=0
-z=this.xG.w7()
+z=J.xH(b,this.ni)
+this.ni=b
+y=this.GQ
+if(y!=null){if(typeof y!=="number")return y.E()
+if(y<=6000)this.At=this.At+1
+if(y>=7000||J.xZ(z,18)){P.JS("Boo!\tStep time: "+H.d(this.GQ)+"\tFrame time: "+H.d(z))
+this.At=0
+y=this.vp
+if(y.length>10)this.JK.SB(y.splice(0,1)[0])}else if(this.At>=5){this.At=0
 x=V.mW()
 x.t5=2
 y=new Float32Array(2)
 y[0]=0
-y[1]=40+(z*5-2.5)
+y[1]=40
 x.bM=new T.z3(y)
-z=new Float32Array(2)
-z[0]=25
-z[1]=0
-x.Xo=new T.z3(z)
+y=new Float32Array(2)
+y[0]=35
+y[1]=0
+x.Xo=new T.z3(y)
 w=this.JK.tH(x)
 w.Ki(this.KP)
 this.vp.push(w)}}Q.Op.prototype.ha.call(this,this,b)
@@ -1679,7 +1678,7 @@ r[0]=u*(v*t-x*s)
 r[1]=u*(y*s-w*z[0])},
 iR:{
 "":"a;",
-G9:function(a,b){var z,y,x
+w7:function(a,b){var z,y,x
 z=a.gDe()
 y=b.gDe()
 x=z.GV
@@ -3829,7 +3828,7 @@ v=w.aY
 u=w.xh
 if((v==null?a==null:v===a)&&(u==null?b==null:u===b))return
 if((v==null?b==null:v===b)&&(u==null?a==null:u===a))return}x=x.aw}if(!y.xr(z))return
-if(!this.CN.G9(a,b))return
+if(!this.CN.w7(a,b))return
 t=this.mg.AD(a,b)
 a=t.aY
 b=t.xh
@@ -3904,7 +3903,7 @@ if(typeof s!=="number")return s.i()
 if((s&8)===8){if(!t.xr(u)){r=z.aw
 this.wg(z)
 z=r
-continue}if(!x.G9(w,v)){r=z.aw
+continue}if(!x.w7(w,v)){r=z.aw
 this.wg(z)
 z=r
 continue}s=z.P6
@@ -8773,7 +8772,7 @@ Ik:{
 "%":"MIDIInput;MIDIPort"},
 KV:{
 "":"D0;",
-gni:function(a){return new W.e7(a)},
+gyT:function(a){return new W.e7(a)},
 zB:function(a){var z=a.parentNode
 if(z!=null)z.removeChild(a)},
 bu:function(a){var z=a.nodeValue
@@ -8825,7 +8824,7 @@ if("createContextualFragment" in window.Range.prototype)return W.cv.prototype.r6
 z=W.U9("<table>"+b+"</table>",c,d)
 y=document.createDocumentFragment()
 y.toString
-new W.e7(y).FV(0,J.jd(z))
+new W.e7(y).FV(0,J.NH(z))
 return y},
 "%":"HTMLTableElement"},
 Iv:{
@@ -9284,8 +9283,7 @@ else z=!1
 if(z)return b
 return a},
 mg:{
-"":"a;",
-w7:function(){return Math.random()}}}],["dart.typed_data.implementation","dart:_native_typed_data",,H,{
+"":"a;"}}],["dart.typed_data.implementation","dart:_native_typed_data",,H,{
 "":"",
 ET:{
 "":"Gv;",
@@ -10300,6 +10298,7 @@ return J.Wx(a).F(a,b)}
 J.Mq=function(a){return J.RE(a).or(a)}
 J.My=function(a){return J.RE(a).gbM(a)}
 J.Mz=function(a){return J.rY(a).hc(a)}
+J.NH=function(a){return J.RE(a).gyT(a)}
 J.Nf=function(a,b){return J.RE(a).sx(a,b)}
 J.O6=function(a){return J.RE(a).goc(a)}
 J.PB=function(a,b){return J.RE(a).sEJ(a,b)}
@@ -10317,7 +10316,6 @@ J.Wm=function(a){return J.RE(a).ng(a)}
 J.Yd=function(a,b){return J.RE(a).Bf(a,b)}
 J.i4=function(a,b){return J.w1(a).Zv(a,b)}
 J.iA=function(a,b){return J.RE(a).sqU(a,b)}
-J.jd=function(a){return J.RE(a).gni(a)}
 J.jz=function(a){if(typeof a=="number")return-a
 return J.Wx(a).J(a)}
 J.kH=function(a,b){return J.w1(a).aN(a,b)}
@@ -12243,10 +12241,10 @@ if(!"name" in V6)V6.name="V6"
 $desc=$collectedClasses.V6
 if($desc instanceof Array)$desc=$desc[1]
 V6.prototype=$desc
-function N3(KP,xG,At,q2,vp,Ij,JK,zT,Iu,qN,Ee,wq,lp,dd,Tr,GQ,QQ){this.KP=KP
+function N3(KP,xG,At,ni,vp,Ij,JK,zT,Iu,qN,Ee,wq,lp,dd,Tr,GQ,QQ){this.KP=KP
 this.xG=xG
 this.At=At
-this.q2=q2
+this.ni=ni
 this.vp=vp
 this.Ij=Ij
 this.JK=JK
