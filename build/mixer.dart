@@ -14,6 +14,7 @@
 
 library MixerDemo;
 
+import 'dart:collection';
 import 'dart:math' as math;
 import 'package:box2d/box2d_browser.dart';
 import 'demo.dart';
@@ -85,13 +86,33 @@ class MixerTest extends Demo {
   num _lastUpdate = 0;
   final List<Body> _bouncers = new List<Body>();
 
+  static const _QUEUE_SIZE = 60;
+  final Queue<num> _frameQueue = new Queue<num>();
+  num _runningAverage = 0;
+
   @override
   void step(num timeStamp) {
 
     var delta = timeStamp - _lastUpdate;
     _lastUpdate = timeStamp;
 
-    if (elapsedUs != null) {
+    if(_frameQueue.length >= _QUEUE_SIZE) {
+      _runningAverage -= _frameQueue.removeFirst();
+    }
+
+    if(_frameQueue.length < _QUEUE_SIZE) {
+      _frameQueue.add(delta);
+      _runningAverage += delta;
+    }
+
+    assert(_frameQueue.length <= _QUEUE_SIZE);
+
+    delta = null;
+    if(_frameQueue.length == _QUEUE_SIZE) {
+      delta = _runningAverage / _QUEUE_SIZE;
+    }
+
+    if (elapsedUs != null && delta != null) {
 
       if (elapsedUs <= 6000) {
         _fastFrameCount++;
