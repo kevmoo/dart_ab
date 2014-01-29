@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html style="overflow: hidden">
+  <head>
+    <title>Demos</title>
+    <!-- This tag improves the experience on mobile browsers. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,
+        maximum-scale=1.0, user-scalable=0">
+
+    <!-- These tags improve web apps on ios. -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style type="text/css">
+      body {
+        font-family: "Courier New", monospace;
+      }
+
+      .header > * {
+        display: inline-block;
+        margin: 0;
+        margin-right: 20px;
+      }
+
+      #data {
+        color: #f00;
+      }
+    </style>
+
+    <script src="packages/browser/dart.js"></script>
+    <script type="application/dart" src="mixer.dart"></script>
+
+  </head>
+  <body>
+    <div class='header'>
+    <h1>Mixer</h1>
+    <pre id="data">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FPS: <span id="fps-counter"></span>
+step time: <span id="world-step-time"></span></pre>
+    </div>
+
+  </body>
+</html>
+
+

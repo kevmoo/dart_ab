@@ -1,4 +1,7 @@
 name: dart_ab
 description: A sample web application
 dependencies:
-  browser: any
+  box2d: '>=0.1.7'
+  browser: '>=0.9.1'
+dev_dependencies:
+  hop: any
