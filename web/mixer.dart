@@ -101,7 +101,7 @@ class MixerTest extends Demo {
         print("Boo!\tStep time: $elapsedUs\tFrame time: $delta");
         _fastFrameCount = 0;
         if (_bouncers.length > 10) {
-          world.destroyBody(_bouncers.removeAt(0));
+          world.destroyBody(_bouncers.removeLast());
         }
       } else if (_fastFrameCount >= 5) {
         _fastFrameCount = 0;
