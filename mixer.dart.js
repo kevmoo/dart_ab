@@ -9489,7 +9489,7 @@ if(y.AL)y.hz()
 y.wm=x.pv}if((y.GE&4)===4)y.JP()
 y.GE=y.GE&4294967293
 this.GQ=C.CD.cU(z.giU()*1000000,1000000)
-J.Eu(this.Ee,0,0,900,600)
+J.Eu(this.Ee,0,0,600,600)
 y.Od()
 z=this.dd
 if(typeof z!=="number")return z.g()
@@ -9500,14 +9500,14 @@ C.ol.hr(z)
 C.ol.oB(z,W.VF(y))},"call$1","gRx",2,0,10],
 KW:function(){var z,y,x,w
 z=H.Go(W.r3("canvas",null),"$isNy")
-z.width=900
+z.width=600
 z.height=600
 this.qN=z
 document.body.appendChild(z)
 this.Ee=J.Yd(this.qN,"2d")
 z=new Float32Array(2)
 y=new T.z3(z)
-z[0]=450
+z[0]=300
 z[1]=300
 z=new T.z3(new Float32Array(2))
 z.xu(y)
