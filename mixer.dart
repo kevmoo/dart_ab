@@ -82,12 +82,15 @@ class MixerTest extends Demo {
     world.createJoint(rjd);
   }
 
+  // TODO(kevmoo) all of these fields should move to the top
+  static const _QUEUE_SIZE = 60;
+  final List<Body> _bouncers = new List<Body>();
+  final Queue<num> _frameQueue = new Queue<num>();
+  final SplayTreeMap<int, int> _counts = new SplayTreeMap<int, int>();
+
+  int _stepCounter = 0;
   int _fastFrameCount = 0;
   num _lastUpdate = 0;
-  final List<Body> _bouncers = new List<Body>();
-
-  static const _QUEUE_SIZE = 60;
-  final Queue<num> _frameQueue = new Queue<num>();
   num _runningAverage = 0;
 
   @override
@@ -119,7 +122,6 @@ class MixerTest extends Demo {
       }
 
       if (elapsedUs >= 7000 || delta > 20) {
-        print("Boo!\tStep time: $elapsedUs\tFrame time: $delta");
         _fastFrameCount = 0;
         if (_bouncers.length > 10) {
           world.destroyBody(_bouncers.removeLast());
@@ -136,6 +138,20 @@ class MixerTest extends Demo {
     ctx.font = '30px Arial';
     ctx.textAlign = 'right';
     ctx.fillText('${_bouncers.length} items', 150, 30);
+
+    if(delta != null) {
+      //
+      // Track jank
+      //
+      var deltaInt = delta.toInt();
+      var current = _counts[deltaInt];
+      if(current == null) current = 0;
+      _counts[deltaInt] = current + 1;
+
+      ctx.font = '10px Arial';
+      ctx.textAlign = 'left';
+      ctx.fillText(_counts.toString(), 0, 500);
+    }
   }
 
   void _addFallingThing() {
