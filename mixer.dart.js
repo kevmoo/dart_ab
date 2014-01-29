@@ -394,7 +394,7 @@ this.ni=b
 y=this.GQ
 if(y!=null){if(typeof y!=="number")return y.E()
 if(y<=6000)this.At=this.At+1
-if(y>=7000||J.xZ(z,18)){P.JS("Boo!\tStep time: "+H.d(this.GQ)+"\tFrame time: "+H.d(z))
+if(y>=7000||J.xZ(z,20)){P.JS("Boo!\tStep time: "+H.d(this.GQ)+"\tFrame time: "+H.d(z))
 this.At=0
 y=this.vp
 if(y.length>10)this.JK.SB(y.pop())}else if(this.At>=5){this.At=0

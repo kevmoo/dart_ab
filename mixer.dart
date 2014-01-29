@@ -97,7 +97,7 @@ class MixerTest extends Demo {
         _fastFrameCount++;
       }
 
-      if (elapsedUs >= 7000 || delta > 18) {
+      if (elapsedUs >= 7000 || delta > 20) {
         print("Boo!\tStep time: $elapsedUs\tFrame time: $delta");
         _fastFrameCount = 0;
         if (_bouncers.length > 10) {
