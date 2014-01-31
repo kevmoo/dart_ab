@@ -85,13 +85,13 @@ class MixerTest extends Demo {
   // TODO(kevmoo) all of these fields should move to the top
   static const _QUEUE_SIZE = 100;
   final List<Body> _bouncers = new List<Body>();
-  final Queue<num> _frameQueue = new Queue<num>();
+  final Queue<num> _stepTimes = new Queue<num>();
   final SplayTreeMap<int, int> _counts = new SplayTreeMap<int, int>();
 
   int _stepCounter = 0;
   int _fastFrameCount = 0;
   num _lastUpdate = 0;
-  num _runningAverage = 0;
+  num _stepTimeRunningAverage = 0;
 
   @override
   void step(num timeStamp) {
@@ -99,27 +99,27 @@ class MixerTest extends Demo {
     var delta = timeStamp - _lastUpdate;
     _lastUpdate = timeStamp;
 
-    if(_frameQueue.length >= _QUEUE_SIZE) {
-      _runningAverage -= _frameQueue.removeFirst();
+    if(_stepTimes.length >= _QUEUE_SIZE) {
+      _stepTimeRunningAverage -= _stepTimes.removeFirst();
     }
 
-    if(_frameQueue.length < _QUEUE_SIZE) {
+    if(_stepTimes.length < _QUEUE_SIZE) {
       if (elapsedUs != null) {
-        _frameQueue.add(elapsedUs);
-        _runningAverage += elapsedUs;
+        _stepTimes.add(elapsedUs);
+        _stepTimeRunningAverage += elapsedUs;
       }
     }
 
-    assert(_frameQueue.length <= _QUEUE_SIZE);
+    assert(_stepTimes.length <= _QUEUE_SIZE);
 
     var avgframe = null;
-    if (_frameQueue.length > 0) {
-      avgframe = _runningAverage / _frameQueue.length;
+    if (_stepTimes.isNotEmpty) {
+      avgframe = _stepTimeRunningAverage / _stepTimes.length;
       if (avgframe < 5500) {
         _fastFrameCount++;
         if (_fastFrameCount > 5) {
           _fastFrameCount = 0;
-          _addFallingThing();
+          _addItem();
         }
       } else if (avgframe > 7000) {
         _fastFrameCount = 0;
@@ -153,12 +153,11 @@ class MixerTest extends Demo {
     }
   }
 
-  void _addFallingThing() {
+  void _addItem() {
     var bd2 = new BodyDef()
         ..type = BodyType.DYNAMIC
-        ..position = new Vector2(0.0, 40.0);
-
-    bd2.linearVelocity = new Vector2(35.0, 0.0);
+        ..position = new Vector2(0.0, 40.0)
+        ..linearVelocity = new Vector2(35.0, 0.0);
 
     var ball = world.createBody(bd2)
         ..createFixture(_ballFixture);
