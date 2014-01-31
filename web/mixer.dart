@@ -83,7 +83,7 @@ class MixerTest extends Demo {
   }
 
   // TODO(kevmoo) all of these fields should move to the top
-  static const _QUEUE_SIZE = 60;
+  static const _QUEUE_SIZE = 100;
   final List<Body> _bouncers = new List<Body>();
   final Queue<num> _frameQueue = new Queue<num>();
   final SplayTreeMap<int, int> _counts = new SplayTreeMap<int, int>();
@@ -104,31 +104,30 @@ class MixerTest extends Demo {
     }
 
     if(_frameQueue.length < _QUEUE_SIZE) {
-      _frameQueue.add(delta);
-      _runningAverage += delta;
+      if (elapsedUs != null) {
+        _frameQueue.add(elapsedUs);
+        _runningAverage += elapsedUs;
+      }
     }
 
     assert(_frameQueue.length <= _QUEUE_SIZE);
 
-    delta = null;
-    if(_frameQueue.length == _QUEUE_SIZE) {
-      delta = _runningAverage / _QUEUE_SIZE;
-    }
-
-    if (elapsedUs != null && delta != null) {
-
-      if (elapsedUs <= 6000) {
+    var avgframe = null;
+    if (_frameQueue.length > 0) {
+      avgframe = _runningAverage / _frameQueue.length;
+      if (avgframe < 5500) {
         _fastFrameCount++;
-      }
-
-      if (elapsedUs >= 7000 || delta > 20) {
-        _fastFrameCount = 0;
-        if (_bouncers.length > 10) {
-          world.destroyBody(_bouncers.removeLast());
+        if (_fastFrameCount > 5) {
+          _fastFrameCount = 0;
+          _addFallingThing();
         }
-      } else if (_fastFrameCount >= 5) {
+      } else if (avgframe > 7000) {
         _fastFrameCount = 0;
-        _addFallingThing();
+        if (_bouncers.length > 1) {
+          world.destroyBody(_bouncers.removeAt(0));
+        }
+      } else {
+        _fastFrameCount = 0;
       }
     }
 
@@ -139,11 +138,11 @@ class MixerTest extends Demo {
     ctx.textAlign = 'right';
     ctx.fillText('${_bouncers.length} items', 150, 30);
 
-    if(delta != null) {
-      //
+    if(avgframe != null) {
+      
       // Track jank
-      //
-      var deltaInt = delta.toInt();
+      
+      var deltaInt = (avgframe / 100).toInt();
       var current = _counts[deltaInt];
       if(current == null) current = 0;
       _counts[deltaInt] = current + 1;
