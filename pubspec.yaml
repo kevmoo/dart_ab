@@ -4,4 +4,4 @@ dependencies:
   box2d: '>=0.1.7'
   browser: '>=0.9.1'
 dev_dependencies:
-  hop: any
+  hop: '>=0.28.3+2'
