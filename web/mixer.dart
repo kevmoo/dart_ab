@@ -138,11 +138,12 @@ class MixerTest extends Demo {
     ctx.textAlign = 'right';
     ctx.fillText('${_bouncers.length} items', 150, 30);
 
-    if(avgframe != null) {
-      
+    // don't start recording delta's until we have a full queue
+    if(delta != null && _stepTimes.length == _QUEUE_SIZE) {
+
       // Track jank
-      
-      var deltaInt = (avgframe / 100).toInt();
+
+      var deltaInt = delta.toInt();
       var current = _counts[deltaInt];
       if(current == null) current = 0;
       _counts[deltaInt] = current + 1;
