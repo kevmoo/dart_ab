@@ -15,6 +15,8 @@
 library MixerDemo;
 
 import 'dart:collection';
+import 'dart:html';
+import 'dart:js' as js;
 import 'dart:math' as math;
 import 'package:box2d/box2d_browser.dart';
 import 'demo.dart';
@@ -148,9 +150,9 @@ class MixerTest extends Demo {
       if(current == null) current = 0;
       _counts[deltaInt] = current + 1;
 
-      ctx.font = '10px Arial';
-      ctx.textAlign = 'left';
-      ctx.fillText(_counts.toString(), 0, 500);
+      //ctx.font = '10px Arial';
+      //ctx.textAlign = 'left';
+      //ctx.fillText(_counts.toString(), 0, 500);
     }
   }
 
@@ -165,10 +167,30 @@ class MixerTest extends Demo {
 
     _bouncers.add(ball);
   }
+
+
+  void _doStats() {
+    var data = [];
+    var totalFrames = 0;
+    _counts.forEach((k, v) {
+      data.add(new js.JsArray.from([k, v]));
+      totalFrames += v;
+    });
+
+    print("Total frames: $totalFrames");
+
+    var windowContext = new js.JsObject.fromBrowserObject(window);
+
+    var jsData = new js.JsArray.from(data);
+
+    windowContext['_chartData'] = jsData;
+
+    js.context.callMethod('updateChart');
+
+  }
 }
 
 void main() {
-
   var psd = new CircleShape()
       ..radius = 1.0;
 
@@ -178,8 +200,11 @@ void main() {
       ..friction = 0.9
       ..restitution = 0.95;
 
-  new MixerTest(ballFixtureDef)
+  var mixer = new MixerTest(ballFixtureDef)
       ..initialize()
       ..initializeAnimation()
       ..runAnimation();
+
+  var button = querySelector('#chart_button') as ButtonElement;
+  button.onClick.listen((_) => mixer._doStats());
 }
