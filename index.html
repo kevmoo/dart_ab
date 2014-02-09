@@ -2,13 +2,10 @@
 <html style="overflow: hidden">
   <head>
     <title>Demos</title>
-    <!-- This tag improves the experience on mobile browsers. -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,
-        maximum-scale=1.0, user-scalable=0">
 
-    <!-- These tags improve web apps on ios. -->
-    <meta name="viewport" content="width=600, initial-scale=1">
+    <meta name="viewport" content="width=600">
 
+    <script type="text/javascript" src="//www.google.com/jsapi"></script>
     <script type="application/dart" src="mixer.dart"></script>
     <script src="packages/browser/dart.js"></script>
 
@@ -32,11 +29,41 @@
   </head>
   <body>
     <div class='header'>
-    <h1>Mixer</h1>
-    <pre id="data">
+      <h1>Mixer</h1>
+      <pre id="data">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FPS: <span id="fps-counter"></span>
 step time: <span id="world-step-time"></span></pre>
     </div>
+
+    <canvas id='demo-canvas'></canvas>
+
+    <button id='chart_button'>Chart</button>
+
+    <div id='chart_div'></div>
+
+     <script type="text/javascript">
+     window._chartData = [];
+     chart = null;
+
+     var options = {
+       legend: { position: 'none' },
+       'hAxis.logScale': true,
+       'vAxis.logScale': true,
+     };
+
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+      }
+
+      function updateChart() {
+        var data = google.visualization.arrayToDataTable(window._chartData, true);
+
+        var data = google.visualization.arrayToDataTable(window._chartData, true);
+        chart.draw(data, options);
+      }
+    </script>
 
   </body>
 </html>
