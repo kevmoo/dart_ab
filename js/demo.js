@@ -105,22 +105,28 @@ function Demo(name, gravity) {
 
 Demo.prototype.step = function(timestamp) {
   //_stopwatch.reset();
-  this.world.step(this.TIME_STEP, this.VELOCITY_ITERATIONS, this.POSITION_ITERATIONS);
-  this.elapsedUs = _stopwatch.elapsedMicroseconds;
+  this.world.Step(this.TIME_STEP, this.VELOCITY_ITERATIONS, this.POSITION_ITERATIONS);
+  //this.elapsedUs = _stopwatch.elapsedMicroseconds;
 
   // Clear the animation panel and draw new frame.
   this.ctx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
-  this.world.drawDebugData();
+  this.world.DrawDebugData();
   this.frameCount++;
 
-  window.requestAnimationFrame(this.step);
+  var that = this;
+  window.requestAnimationFrame(function(ts) {
+    that.step(ts);
+  });
 }
 
 /**
  * Starts running the demo as an animation using an animation scheduler.
  */
 Demo.prototype.runAnimation = function() {
-  window.requestAnimationFrame(this.step);
+  var that = this;
+  window.requestAnimationFrame(function(ts) {
+    that.step(ts);
+  });
 }
 
 /**
@@ -131,19 +137,27 @@ Demo.prototype.initializeAnimation = function() {
     // Setup the canvas.
     this.canvas = document.querySelector('#demo-canvas');
     this.canvas.width = this.CANVAS_WIDTH;
-    this.height = this.CANVAS_HEIGHT;
+    this.canvas.height = this.CANVAS_HEIGHT;
     this.ctx = this.canvas.getContext("2d");
 
     // Create the viewport transform with the center at extents.
-    var extents = new Vector2(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
-    viewport = new CanvasViewportTransform(extents, extents);
-    viewport.scale = this._viewportScale;
+    //var extents = new b2Vector2(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
+    //this.viewport = new CanvasViewportTransform(extents, extents);
+    //this.viewport.scale = this._viewportScale;
 
     // Create our canvas drawing tool to give to the world.
-    this.debugDraw = new CanvasDraw(viewport, ctx);
+    //this.debugDraw = new CanvasDraw(viewport, ctx);
+
+       var debugDraw = new b2DebugDraw();
+       debugDraw.SetSprite(this.ctx);
+       //debugDraw.SetDrawScale(this._viewportScale);
+       debugDraw.SetDrawScale(30);
+       debugDraw.SetFillAlpha(0.3);
+       debugDraw.SetLineThickness(1.0);
+       debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
 
     // Have the world draw itself for debugging purposes.
-    this.world.debugDraw = debugDraw;
+    this.world.SetDebugDraw = debugDraw;
 
     this.frameCount = 0;
     this.fpsCounter = document.querySelector("#fps-counter");
@@ -152,12 +166,12 @@ Demo.prototype.initializeAnimation = function() {
     var that = this;
 
     window.setInterval(function() {
-      that.fpsCounter.innerHtml = that.frameCount.toString();
+      that.fpsCounter.innerHTML = that.frameCount.toString();
       that.frameCount = 0;
     }, 1000);
 
     window.setInterval(function() {
       if (that.elapsedUs == null) return;
-      that.worldStepTime.innerHtml = "${elapsedUs / 1000} ms";
+      that.worldStepTime.innerHTML = (elapsedUs / 1000) + " ms";
     }, 200);
   }

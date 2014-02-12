@@ -61,6 +61,7 @@ MixerTest.prototype.initialize = function() {
     var yPos = radius * Math.sin(angle);
 
     var cd = new b2PolygonShape();
+    // TODO what is the box2dweb version of this?
     //cd.SetAsBoxWithCenterAndAngle(1.0, 30.0, new b2Vec2(xPos, yPos), angle);
     cd.SetAsBox(1.0, 30.0);
     //cd.position.x = xPos;
@@ -138,7 +139,7 @@ MixerTest.prototype.step = function(timeStamp) {
   //assert(_stepTimes.length <= _QUEUE_SIZE);
 
   var avgframe = null;
-  if (this._stepTimes.isNotEmpty) {
+  if (this._stepTimes.length > 0) {
     avgframe = this._stepTimeRunningAverage / this._stepTimes.length;
     if (avgframe < 5500) {
       this._fastFrameCount++;
@@ -157,12 +158,12 @@ MixerTest.prototype.step = function(timeStamp) {
   }
 
   // XXX is this how you call super.step in JS?
-  Demo.prototype.step.call(timeStamp);
+  Demo.prototype.step.call(this, timeStamp);
 
   this.ctx.fillStyle = 'black';
   this.ctx.font = '30px Arial';
   this.ctx.textAlign = 'right';
-  this.ctx.fillText('${_bouncers.length} items', 150, 30);
+  this.ctx.fillText(this._bouncers.length + ' items', 150, 30);
 
   // don't start recording delta's until we have a full queue
   if(delta != null && this._stepTimes.length == this._QUEUE_SIZE) {
@@ -194,7 +195,7 @@ function main() {
   mixer.runAnimation();
 
   var button = document.querySelector('#chart_button');
-  button.addListener('click', function(e) { mixer._doStats() });
+  button.addEventListener('click', function(e) { mixer._doStats() });
 }
 
 main();
