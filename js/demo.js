@@ -115,6 +115,7 @@ Demo.prototype.step = function(timestamp) {
   this.ctx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
   this.ctx.save();
   this.ctx.translate(this.CANVAS_WIDTH / 2, this.CANVAS_HEIGHT / 2);
+
   // TODO I didn't find this explicitly in the Dart version, but
   // this is needed to match the Dart version
   this.ctx.scale(1.5, -1.5);
@@ -161,13 +162,13 @@ Demo.prototype.initializeAnimation = function() {
     // Create our canvas drawing tool to give to the world.
     //this.debugDraw = new CanvasDraw(viewport, ctx);
 
-       var debugDraw = new b2DebugDraw();
-       debugDraw.SetSprite(this.ctx);
-       //debugDraw.SetDrawScale(this._viewportScale);
-       debugDraw.SetDrawScale(3);
-       debugDraw.SetFillAlpha(0.3);
-       debugDraw.SetLineThickness(1.0);
-       debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
+    var debugDraw = new b2DebugDraw();
+    debugDraw.SetSprite(this.ctx);
+    //debugDraw.SetDrawScale(this._viewportScale);
+    debugDraw.SetDrawScale(3);
+    debugDraw.SetFillAlpha(0.3);
+    debugDraw.SetLineThickness(1.0);
+    debugDraw.SetFlags(b2DebugDraw.e_shapeBit);
 
     // Have the world draw itself for debugging purposes.
     this.world.SetDebugDraw(debugDraw);
