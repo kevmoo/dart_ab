@@ -151,15 +151,15 @@ Demo.prototype.initializeAnimation = function() {
     //this.viewport = new CanvasViewportTransform(extents, extents);
     //this.viewport.scale = this._viewportScale;
 
-    this.ctx.translate(this.CANVAS_WIDTH / 2, this.CANVAS_HEIGHT / 2);
+    //this.ctx.translate(this.CANVAS_WIDTH / 2, this.CANVAS_HEIGHT / 2);
 
     // Create our canvas drawing tool to give to the world.
     //this.debugDraw = new CanvasDraw(viewport, ctx);
 
        var debugDraw = new b2DebugDraw();
        debugDraw.SetSprite(this.ctx);
-       //debugDraw.SetDrawScale(this._viewportScale);
-       debugDraw.SetDrawScale(3);
+       debugDraw.SetDrawScale(this._viewportScale);
+       //debugDraw.SetDrawScale(3);
        debugDraw.SetFillAlpha(0.3);
        debugDraw.SetLineThickness(1.0);
        debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
