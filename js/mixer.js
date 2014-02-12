@@ -61,12 +61,8 @@ MixerTest.prototype.initialize = function() {
     var yPos = radius * Math.sin(angle);
 
     var cd = new b2PolygonShape();
-    // TODO what is the box2dweb version of this?
     //cd.SetAsBoxWithCenterAndAngle(1.0, 30.0, new b2Vec2(xPos, yPos), angle);
-    cd.SetAsBox(1.0, 30.0);
-    //cd.position.x = xPos;
-    //cd.position.y = yPos;
-    cd.angle = angle;
+    cd.SetAsBox(1.0, 30.0, new b2Vec2(xPos, yPos), angle);
 
     var fd = new b2FixtureDef();
     fd.shape = cd;

@@ -144,10 +144,14 @@ Demo.prototype.initializeAnimation = function() {
     this.canvas.height = this.CANVAS_HEIGHT;
     this.ctx = this.canvas.getContext("2d");
 
+    // TODO fix?
+
     // Create the viewport transform with the center at extents.
     //var extents = new b2Vector2(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
     //this.viewport = new CanvasViewportTransform(extents, extents);
     //this.viewport.scale = this._viewportScale;
+
+    this.ctx.translate(this.CANVAS_WIDTH / 2, this.CANVAS_HEIGHT / 2);
 
     // Create our canvas drawing tool to give to the world.
     //this.debugDraw = new CanvasDraw(viewport, ctx);
@@ -155,13 +159,13 @@ Demo.prototype.initializeAnimation = function() {
        var debugDraw = new b2DebugDraw();
        debugDraw.SetSprite(this.ctx);
        //debugDraw.SetDrawScale(this._viewportScale);
-       debugDraw.SetDrawScale(30);
+       debugDraw.SetDrawScale(3);
        debugDraw.SetFillAlpha(0.3);
        debugDraw.SetLineThickness(1.0);
        debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
 
     // Have the world draw itself for debugging purposes.
-    this.world.SetDebugDraw = debugDraw;
+    this.world.SetDebugDraw(debugDraw);
 
     this.frameCount = 0;
     this.fpsCounter = document.querySelector("#fps-counter");
