@@ -94,15 +94,15 @@ MixerTest.prototype.initialize = function() {
 }
 
 MixerTest.prototype._addItem = function() {
-  var bd2 = new BodyDef();
-  bd2.type = BodyType.DYNAMIC;
+  var bd2 = new b2BodyDef();
+  bd2.type = b2Body.b2_dynamicBody;
   bd2.position = new b2Vec2(0.0, 40.0);
   bd2.linearVelocity = new b2Vec2(35.0, 0.0);
 
-  var ball = world.createBody(bd2);
-  ball.createFixture(this._ballFixture);
+  var ball = this.world.CreateBody(bd2);
+  ball.CreateFixture(this._ballFixture);
 
-  this._bouncers.add(ball);
+  this._bouncers.push(ball);
 }
 
 MixerTest.prototype._doStats = function() {
@@ -126,13 +126,13 @@ MixerTest.prototype.step = function(timeStamp) {
   this._lastUpdate = timeStamp;
 
   if (this._stepTimes.length >= this._QUEUE_SIZE) {
-    this._stepTimeRunningAverage -= this._stepTimes.removeFirst();
+    this._stepTimeRunningAverage -= this._stepTimes.shift();
   }
 
   if (this._stepTimes.length < this._QUEUE_SIZE) {
     if (this.elapsedUs != null) {
-      this._stepTimes.push(elapsedUs);
-      this._stepTimeRunningAverage += elapsedUs;
+      this._stepTimes.push(this.elapsedUs);
+      this._stepTimeRunningAverage += this.elapsedUs;
     }
   }
 
@@ -172,7 +172,7 @@ MixerTest.prototype.step = function(timeStamp) {
 
     var current = this._counts[delta];
     if(current == null) current = 0;
-    this._counts[deltaInt] = current + 1;
+    this._counts[delta] = current + 1;
 
     //ctx.font = '10px Arial';
     //ctx.textAlign = 'left';

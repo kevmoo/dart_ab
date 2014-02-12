@@ -57,6 +57,8 @@ function Demo(name, gravity) {
   // every frame to minimize overhead.
   //final Stopwatch _stopwatch;
 
+  this._lastStepCallTime = null;
+
   //final double _viewportScale;
 
   this._viewportScale = this._VIEWPORT_SCALE;
@@ -107,6 +109,8 @@ Demo.prototype.step = function(timestamp) {
   //_stopwatch.reset();
   this.world.Step(this.TIME_STEP, this.VELOCITY_ITERATIONS, this.POSITION_ITERATIONS);
   //this.elapsedUs = _stopwatch.elapsedMicroseconds;
+  this.elapsedUs = timestamp - this._lastStepCallTime;
+  this._lastStepCallTime = timestamp;
 
   // Clear the animation panel and draw new frame.
   this.ctx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
@@ -172,6 +176,6 @@ Demo.prototype.initializeAnimation = function() {
 
     window.setInterval(function() {
       if (that.elapsedUs == null) return;
-      that.worldStepTime.innerHTML = (elapsedUs / 1000) + " ms";
+      that.worldStepTime.innerHTML = (this.elapsedUs / 1000) + " ms";
     }, 200);
   }
