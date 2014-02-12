@@ -62,7 +62,7 @@ MixerTest.prototype.initialize = function() {
 
     var cd = new b2PolygonShape();
     //cd.SetAsBoxWithCenterAndAngle(1.0, 30.0, new b2Vec2(xPos, yPos), angle);
-    cd.SetAsBox(1.0, 30.0, new b2Vec2(xPos, yPos), angle);
+    cd.SetAsOrientedBox(1.0, 30.0, new b2Vec2(xPos, yPos), angle);
 
     var fd = new b2FixtureDef();
     fd.shape = cd;
