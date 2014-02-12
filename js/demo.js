@@ -114,7 +114,10 @@ Demo.prototype.step = function(timestamp) {
 
   // Clear the animation panel and draw new frame.
   this.ctx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+  this.ctx.save();
+  this.ctx.translate(this.CANVAS_WIDTH / 2, this.CANVAS_HEIGHT / 2);
   this.world.DrawDebugData();
+  this.ctx.restore();
   this.frameCount++;
 
   var that = this;
@@ -158,8 +161,8 @@ Demo.prototype.initializeAnimation = function() {
 
        var debugDraw = new b2DebugDraw();
        debugDraw.SetSprite(this.ctx);
-       debugDraw.SetDrawScale(this._viewportScale);
-       //debugDraw.SetDrawScale(3);
+       //debugDraw.SetDrawScale(this._viewportScale);
+       debugDraw.SetDrawScale(3);
        debugDraw.SetFillAlpha(0.3);
        debugDraw.SetLineThickness(1.0);
        debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
