@@ -127,9 +127,9 @@ MixerTest.prototype.step = function(timeStamp) {
   }
 
   if (this._stepTimes.length < this._QUEUE_SIZE) {
-    if (this.elapsedUs != null) {
-      this._stepTimes.push(this.elapsedUs);
-      this._stepTimeRunningAverage += this.elapsedUs;
+    if (delta != null) {
+      this._stepTimes.push(delta);
+      this._stepTimeRunningAverage += delta;
     }
   }
 
@@ -138,13 +138,13 @@ MixerTest.prototype.step = function(timeStamp) {
   var avgframe = null;
   if (this._stepTimes.length > 0) {
     avgframe = this._stepTimeRunningAverage / this._stepTimes.length;
-    if (avgframe < 5500) {
+    if (avgframe < 17) {
       this._fastFrameCount++;
       if (this._fastFrameCount > 5) {
         this._fastFrameCount = 0;
         this._addItem();
       }
-    } else if (avgframe > 6000) {
+    } else if (avgframe > 18) {
       this._fastFrameCount = 0;
       if (this._bouncers.length > 1) {
         this.world.DestroyBody(this._bouncers.shift());
