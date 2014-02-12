@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html style="overflow: hidden">
+  <head>
+    <title>Demos</title>
+
+    <meta name="viewport" content="width=600">
+
+
+
+    <style type="text/css">
+      body {
+        font-family: "Courier New", monospace;
+      }
+
+      .header > * {
+        display: inline-block;
+        margin: 0;
+        margin-right: 20px;
+      }
+
+      #data {
+        font-size: 20px;
+        color: #f00;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div class='header'>
+      <h1>Mixer</h1>
+      <pre id="data">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FPS: <span id="fps-counter"></span>
+step time: <span id="world-step-time"></span></pre>
+    </div>
+
+    <canvas id='demo-canvas'></canvas>
+
+    <button id='chart_button'>Chart</button>
+
+    <div id='chart_div'></div>
+    
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="Box2dWeb-2.1.a.3.min.js"></script>
+    <script type="text/javascript" src="box2dweb-util.js"></script>
+    <script type="text/javascript" src="demo.js"></script>
+    <script type="text/javascript" src="mixer.js"></script>
+
+     <script type="text/javascript">
+     window._chartData = [];
+     chart = null;
+
+     var options = {
+       legend: { position: 'none' },
+       'hAxis.logScale': true,
+       'vAxis.logScale': true,
+     };
+
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+      }
+
+      function updateChart() {
+        var data = google.visualization.arrayToDataTable(window._chartData, true);
+
+        var data = google.visualization.arrayToDataTable(window._chartData, true);
+        chart.draw(data, options);
+      }
+    </script>
+
+  </body>
+</html>
