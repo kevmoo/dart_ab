@@ -115,6 +115,9 @@ Demo.prototype.step = function(timestamp) {
   this.ctx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
   this.ctx.save();
   this.ctx.translate(this.CANVAS_WIDTH / 2, this.CANVAS_HEIGHT / 2);
+  // TODO I didn't find this explicitly in the Dart version, but
+  // this is needed to match the Dart version
+  this.ctx.scale(1.5, -1.5);
   this.world.DrawDebugData();
   this.ctx.restore();
   this.frameCount++;
