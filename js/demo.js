@@ -176,6 +176,6 @@ Demo.prototype.initializeAnimation = function() {
 
     window.setInterval(function() {
       if (that.elapsedUs == null) return;
-      that.worldStepTime.innerHTML = (this.elapsedUs / 1000) + " ms";
+      that.worldStepTime.innerHTML = (that.elapsedUs / 1000) + " ms";
     }, 200);
   }

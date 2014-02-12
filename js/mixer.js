@@ -110,7 +110,8 @@ MixerTest.prototype._doStats = function() {
   var totalFrames = 0;
 
   for (var k in this._counts) {
-    data.push([k, this._counts[k]]);
+    var v = this._counts[k];
+    data.push([k, v]);
     totalFrames += v;
   }
 
