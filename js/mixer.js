@@ -107,7 +107,7 @@ MixerTest.prototype._doStats = function() {
 
   for (var k in this._counts) {
     var v = this._counts[k];
-    data.push([k, v]);
+    data.push([Number(k), v]);
     totalFrames += v;
   }
 
@@ -167,9 +167,11 @@ MixerTest.prototype.step = function(timeStamp) {
 
     // Track jank
 
-    var current = this._counts[delta];
+    var intDelta = parseInt(delta);
+
+    var current = this._counts[intDelta];
     if(current == null) current = 0;
-    this._counts[delta] = current + 1;
+    this._counts[intDelta] = current + 1;
 
     //ctx.font = '10px Arial';
     //ctx.textAlign = 'left';
