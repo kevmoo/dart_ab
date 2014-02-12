@@ -57,8 +57,6 @@ function Demo(name, gravity) {
   // every frame to minimize overhead.
   //final Stopwatch _stopwatch;
 
-  this._lastStepCallTime = null;
-
   //final double _viewportScale;
 
   this._viewportScale = this._VIEWPORT_SCALE;
@@ -107,10 +105,11 @@ function Demo(name, gravity) {
 
 Demo.prototype.step = function(timestamp) {
   //_stopwatch.reset();
+  var before = performance.now();
   this.world.Step(this.TIME_STEP, this.VELOCITY_ITERATIONS, this.POSITION_ITERATIONS);
+  var after = performance.now()
   //this.elapsedUs = _stopwatch.elapsedMicroseconds;
-  this.elapsedUs = timestamp - this._lastStepCallTime;
-  this._lastStepCallTime = timestamp;
+  this.elapsedUs = 1000 * (after - before);
 
   // Clear the animation panel and draw new frame.
   this.ctx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);

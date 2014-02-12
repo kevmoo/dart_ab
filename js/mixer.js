@@ -144,10 +144,10 @@ MixerTest.prototype.step = function(timeStamp) {
         this._fastFrameCount = 0;
         this._addItem();
       }
-    } else if (avgframe > 7000) {
+    } else if (avgframe > 6000) {
       this._fastFrameCount = 0;
       if (this._bouncers.length > 1) {
-        this.world.destroyBody(_bouncers.removeAt(0));
+        this.world.DestroyBody(this._bouncers.shift());
       }
     } else {
       this._fastFrameCount = 0;
