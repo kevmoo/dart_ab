@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'package:args/args.dart';
 import 'package:bot/bot.dart';
-import 'package:bot_io/bot_git.dart';
+import 'package:git/git.dart';
 import 'package:bot_io/bot_io.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/tasks_shared.dart';
@@ -15,6 +15,11 @@ const _allowDirtyArg = 'allow-dirty';
 const _targetBranchArg = 'target-branch';
 
 /**
+ * *DEPRECATED*.
+ *
+ * `createDartDocTask` maps to the old `dartdoc` command which has been removed
+ * from Dart v1.2. Look for an updated
+ *
  * [targetBranch] the Git branch that will contain the generated docs. If the
  * branch doesn't exist, it will be created. Default: `gh-pages`
  *
@@ -27,6 +32,7 @@ const _targetBranchArg = 'target-branch';
  * signature `Future postBuild(TaskLogger logger, String tempDocPath)`. Use this
  * if you want to modify the doc output.
  */
+@deprecated
 Task createDartDocTask(dynamic delayedLibraryList, {
   String targetBranch: 'gh-pages',
   String packageDir: 'packages/',
@@ -139,14 +145,13 @@ Future _doDocsPopulate(TaskContext ctx, TempDir dir, Iterable<String> libs,
   args.addAll(libs);
   ctx.fine("Generating docs into: $dir");
 
-  var subCtx = ctx.getSubContext('dartdoc');
+  var subLogger = ctx.getSubLogger('dartdoc');
 
-  return startProcess(subCtx, getPlatformBin('dartdoc'), args)
+  return startProcess(subLogger, getPlatformBin('dartdoc'), args)
       .then((_) {
-        subCtx.dispose();
-
         if(postBuild != null) {
           return postBuild(ctx.getSubLogger('post-build'), dir.path);
         }
-      });
+      })
+      .whenComplete(() => subLogger.dispose());
 }

@@ -2,7 +2,7 @@ library hop.shared;
 
 import 'package:args/args.dart';
 import 'package:bot/bot.dart';
-import 'package:bot_io/completion.dart' as completion;
+import 'package:completion/completion.dart' as completion;
 import 'package:logging/logging.dart';
 
 const _RESERVED_TASKS = const [completion.COMPLETION_COMMAND_NAME];
@@ -44,7 +44,7 @@ void validateTaskName(String name) {
   requireArgumentNotNullOrEmpty(name, 'name');
   requireArgumentContainsPattern(_validNameRegExp, name, 'name');
   requireArgument(!_RESERVED_TASKS.contains(name), 'task',
-  'The provided task has a reserved name');
+      'The provided task has a reserved name');
 }
 
 // TODO: move this to bot?

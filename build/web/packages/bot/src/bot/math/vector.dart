@@ -26,14 +26,12 @@ class Vector<T extends num> extends Coordinate<T> {
    * Multiplies each dimensions by the provided magnitude and returns a new [Vector].
    **/
   @override
-  Vector<T> operator *(num magnitude) =>
-      this.scale(magnitude);
+  Vector<T> operator *(num magnitude) => this.scale(magnitude);
 
   /**
    * Multiplies each dimensions by the provided magnitude and returns a new [Vector].
    **/
-  Vector<T> scale(num magnitude) =>
-      new Vector<T>(x * magnitude, y * magnitude);
+  Vector<T> scale(num magnitude) => new Vector<T>(x * magnitude, y * magnitude);
 
   /**
    * Computes the dot product with the given [Vector].
@@ -50,7 +48,7 @@ class Vector<T extends num> extends Coordinate<T> {
    * Angle zero points in the +X direction, 90 degrees points in the +Y
    * direction (down) and from there we grow clockwise.
    **/
-  num getAngle (Vector other) => other.angle - angle;
+  num getAngle(Vector other) => other.angle - angle;
 
   Vector rotate(num angle) {
     var cos = math.cos(angle);
