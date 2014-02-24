@@ -8,7 +8,7 @@ class BungeeNum {
 
   BungeeNum(num target, [num current]) {
     this.target = target;
-    if(current == null) {
+    if (current == null) {
       current = target;
     }
     this.current = current;
@@ -32,7 +32,7 @@ class BungeeNum {
     assert(isValidNumber(_target));
     assert(isValidNumber(_current));
 
-    if(_velocity == null) {
+    if (_velocity == null) {
       _velocity = 0;
     } else {
       _velocity *= 0.8;
@@ -47,7 +47,7 @@ class BungeeNum {
 
     final delta = (_current - _target).abs();
 
-    if(delta < 0.01 && _velocity.abs() < 0.01) {
+    if (delta < 0.01 && _velocity.abs() < 0.01) {
       _current = _target;
       _velocity = null;
       return false;

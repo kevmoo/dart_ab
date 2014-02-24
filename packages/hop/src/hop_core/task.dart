@@ -1,32 +1,6 @@
 part of hop.core;
 
-typedef void _ArgParserConfigure(ArgParser);
-
 typedef dynamic _TaskDefinition(TaskContext ctx);
-
-class _TaskWithConfig extends Task {
-  final _ArgParserConfigure _argParserConfig;
-  ArgParser _argParser;
-
-  _TaskWithConfig(dynamic taskDefinition(TaskContext ctx), String description,
-    List<TaskArgument> extendedArgs, this._argParserConfig) :
-      super._impl(taskDefinition, description, extendedArgs);
-
-  ArgParser get argParser {
-    if(_argParser == null) {
-      _argParser = new ArgParser();
-      _argParserConfig(_argParser);
-    }
-    return _argParser;
-  }
-
-  Task clone({String description}) {
-    if(description == null) description = this.description;
-
-    return new Task(_exec, description: description, config: _argParserConfig,
-        extendedArgs: _extendedArgs);
-  }
-}
 
 class _TaskWithParser extends Task {
   final ArgParser argParser;
@@ -36,7 +10,7 @@ class _TaskWithParser extends Task {
       super._impl(taskDefinition, description, extendedArgs);
 
   Task clone({String description}) {
-    if(description == null) description = this.description;
+    if (description == null) description = this.description;
 
     return new Task(_exec, description: description, argParser: argParser,
         extendedArgs: _extendedArgs);
@@ -50,40 +24,11 @@ abstract class Task {
 
   ArgParser get argParser;
 
-  /**
-   * **DEPRECATED** Use `new Task` instead.
-   */
-  @deprecated
-  factory Task.sync(dynamic taskDefinition(TaskContext ctx),
-      {String description, void config(ArgParser),
-       List<TaskArgument> extendedArgs}) = Task;
-
-  /**
-   * **DEPRECATED** Use `new Task` instead.
-   */
-  @deprecated
-  factory Task.async(Future taskDefinition(TaskContext ctx),
-      {String description, void config(ArgParser),
-       List<TaskArgument> extendedArgs}) = Task;
-
-  /**
-   * The [config] paramater is **DEPRECATED**. Provide the [argParser] parameter
-   * instead.
-   */
   factory Task(dynamic taskDefinition(TaskContext ctx), {String description,
-    List<TaskArgument> extendedArgs, ArgParser argParser,
-    @deprecated void config(ArgParser)}) {
+    List<TaskArgument> extendedArgs, ArgParser argParser}) {
 
-    if(config != null) {
-      if(argParser != null) {
-        throw new ArgumentError('Cannot provide both an argParser and config.');
-      }
-
-      return new _TaskWithConfig(taskDefinition, description, extendedArgs, config);
-    }
-
-    return new _TaskWithParser(taskDefinition, description,
-        extendedArgs, argParser);
+    return new _TaskWithParser(taskDefinition, description, extendedArgs,
+        argParser);
   }
 
   Task._impl(dynamic taskDefinition(TaskContext ctx), String description,
@@ -117,7 +62,7 @@ abstract class Task {
     Map<String, dynamic> extendedArgs;
     try {
       extendedArgs = this.parseExtendedArgs(runtime.argResults.rest);
-    } on FormatException catch(obj, stack) {
+    } on FormatException catch (obj, stack) {
       var usage = new TaskUsageException(obj.message, obj, stack);
       return new Future.error(usage, stack);
     }
@@ -147,12 +92,15 @@ abstract class Task {
       if (!_extendedArgs.last.multiple &&
         argResultsRest.length > _extendedArgs.length) {
         var expected = _extendedArgs.length;
-        throw new FormatException('Expected $expected argument(s); received $actual');
+        throw new FormatException(
+            'Expected $expected argument(s); received $actual');
       } else {
-        var lastRequiredIndex = lastIndexWhere(_extendedArgs, (arg) => arg.required);
-        if(argResultsRest.length <= lastRequiredIndex) {
+        var lastRequiredIndex = lastIndexWhere(_extendedArgs, (arg) =>
+            arg.required);
+        if (argResultsRest.length <= lastRequiredIndex) {
           var expected = lastRequiredIndex + 1;
-          throw new FormatException('Expected $expected argument(s); received $actual');
+          throw new FormatException(
+              'Expected $expected argument(s); received $actual');
         }
       }
     }
@@ -161,17 +109,17 @@ abstract class Task {
     //       with extended arg order
     var map = new LinkedHashMap<String, dynamic>();
 
-    for(var i = 0; i < _extendedArgs.length; i++) {
+    for (var i = 0; i < _extendedArgs.length; i++) {
       var arg = _extendedArgs[i];
 
       var result = null;
 
 
-      if(arg.multiple) {
-        assert(i == _extendedArgs.length -1); // better be the last arg
+      if (arg.multiple) {
+        assert(i == _extendedArgs.length - 1); // better be the last arg
         result = argResultsRest.skip(i).toList(growable: false);
       } else {
-        if(i >= argResultsRest.length) {
+        if (i >= argResultsRest.length) {
           assert(!arg.required); // should have already been covered above
           result = null;
         } else {
@@ -189,9 +137,9 @@ abstract class Task {
 }
 
 ZoneSpecification _getZoneSpec(TaskRuntime runtime) {
-  if(runtime.printAtLevel == null) return null;
+  if (runtime.printAtLevel == null) return null;
 
-  return new ZoneSpecification(print: (a,b,c,String line) {
+  return new ZoneSpecification(print: (a, b, c, String line) {
     runtime.addLog(runtime.printAtLevel, line);
   });
 }

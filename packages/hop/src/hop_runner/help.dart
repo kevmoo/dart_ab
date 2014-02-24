@@ -17,7 +17,8 @@ Task _getHelpTask(_HelpArgs helpArgs) {
     final args = ctx.arguments;
 
     if (args.command != null) {
-      _printHelpForTask(helpArgs.printer, helpArgs.registry, args.command.name, helpArgs.parser);
+      _printHelpForTask(helpArgs.printer, helpArgs.registry, args.command.name,
+          helpArgs.parser);
     } else {
       _printHelp(helpArgs.printer, helpArgs.registry, helpArgs.parser);
 
@@ -27,16 +28,18 @@ Task _getHelpTask(_HelpArgs helpArgs) {
     }
   },
   description: 'Print help information about available tasks',
-  config: (parser) => _helpParserConfig(helpArgs.registry, parser),
+  argParser: _helpParserConfig(helpArgs.registry.tasks.keys),
   extendedArgs: [new TaskArgument('task-name')]);
 }
 
-void _helpParserConfig(TaskRegistry config, ArgParser parser) {
-  config._requireFrozen();
+ArgParser _helpParserConfig(Iterable<String> taskNames) {
+  var parser = new ArgParser();
 
-  for (final taskName in config.tasks.keys) {
+  for (var taskName in taskNames) {
     parser.addCommand(taskName);
   }
+
+  return parser;
 }
 
 void _printHelpForTask(_Printer printer, TaskRegistry config, String taskName, ArgParser hopArgParser) {
@@ -45,7 +48,8 @@ void _printHelpForTask(_Printer printer, TaskRegistry config, String taskName, A
 
   final usage = task.getUsage();
 
-  printer(_getUsage(showOptions: !usage.isEmpty, taskName: taskName, extendedArgsUsage: task.getExtendedArgsUsage()));
+  printer(_getUsage(showOptions: !usage.isEmpty, taskName: taskName,
+      extendedArgsUsage: task.getExtendedArgsUsage()));
   printer('');
   if (!task.description.isEmpty) {
     printer(_indent(task.description));
@@ -121,7 +125,7 @@ void _printTaskTable(_Printer printer, TaskRegistry config) {
                      return task.description;
                    })
                    ];
-  final rows = Console.getTable(config.taskNames, columns);
+  final rows = Console.getTable(config.tasks.keys, columns);
   for (final r in rows) {
     printer('  ' + r);
   }

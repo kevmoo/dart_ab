@@ -106,9 +106,9 @@ class MixerTest extends Demo {
     }
 
     if(_stepTimes.length < _QUEUE_SIZE) {
-      if (elapsedUs != null) {
-        _stepTimes.add(elapsedUs);
-        _stepTimeRunningAverage += elapsedUs;
+      if (delta != null) {
+        _stepTimes.add(delta);
+        _stepTimeRunningAverage += delta;
       }
     }
 
@@ -117,13 +117,14 @@ class MixerTest extends Demo {
     var avgframe = null;
     if (_stepTimes.isNotEmpty) {
       avgframe = _stepTimeRunningAverage / _stepTimes.length;
-      if (avgframe < 5500) {
+
+      if (avgframe < 17) {
         _fastFrameCount++;
         if (_fastFrameCount > 5) {
           _fastFrameCount = 0;
           _addItem();
         }
-      } else if (avgframe > 7000) {
+      } else if (avgframe > 18) {
         _fastFrameCount = 0;
         if (_bouncers.length > 1) {
           world.destroyBody(_bouncers.removeAt(0));
