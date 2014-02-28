@@ -22,18 +22,13 @@ import 'package:box2d/box2d_browser.dart';
 import 'demo.dart';
 
 class MixerTest extends Demo {
-  static const _QUEUE_SIZE = 100;
 
   final FixtureDef _ballFixture;
   final math.Random _rnd;
   final List<Body> _bouncers = new List<Body>();
-  final Queue<num> _stepTimes = new Queue<num>();
   final SplayTreeMap<int, int> _counts = new SplayTreeMap<int, int>();
 
-  int _stepCounter = 0;
   int _fastFrameCount = 0;
-  int _slowFrameCount = 0;
-  num _stepTimeRunningAverage = 0;
 
   MixerTest(this._ballFixture)
       : _rnd = new math.Random(),
@@ -95,44 +90,20 @@ class MixerTest extends Demo {
   void step(num timeStamp) {
     super.step(timeStamp);
 
-    if(_stepTimes.length >= _QUEUE_SIZE) {
-      _stepTimeRunningAverage -= _stepTimes.removeFirst();
+    var avgFrame = super.avgStepTime;
+
+    if (avgFrame < 7000) {
+      _fastFrameCount++;
+    } else if (avgFrame > 8000) {
+      _fastFrameCount = 0;
+      if (_bouncers.length > 1) {
+        world.destroyBody(_bouncers.removeAt(0));
+      }
     }
 
-    if(_stepTimes.length < _QUEUE_SIZE) {
-      _stepTimes.add(elapsedUs);
-      _stepTimeRunningAverage += elapsedUs;
-    }
-
-    assert(_stepTimes.length <= _QUEUE_SIZE);
-
-    if (_stepTimes.isNotEmpty) {
-      var avgframe = _stepTimeRunningAverage ~/ _stepTimes.length;
-
-      if (avgframe < 4000) {
-        _fastFrameCount++;
-        _slowFrameCount = 0;
-      } else if (avgframe > 5000) {
-        _fastFrameCount = 0;
-        _slowFrameCount--;
-      } else {
-        _slowFrameCount = 0;
-        _fastFrameCount = 0;
-      }
-
-      if(_fastFrameCount > 6) {
-        assert(_slowFrameCount == 0);
-        _fastFrameCount = 0;
-        _addItem();
-      }
-
-      if (_slowFrameCount > 3) {
-        assert(_fastFrameCount == 0);
-        _slowFrameCount = 0;
-        if (_bouncers.length > 1) {
-          world.destroyBody(_bouncers.removeAt(0));
-        }
-      }
+    if(_fastFrameCount > 5) {
+      _fastFrameCount = 0;
+      _addItem();
     }
 
     ctx.fillStyle = 'black';
@@ -140,13 +111,10 @@ class MixerTest extends Demo {
     ctx.textAlign = 'right';
     ctx.fillText('${_bouncers.length} items', 150, 30);
 
-    // don't start recording delta's until we have a full queue
-    if(_stepTimes.length == _QUEUE_SIZE) {
-      var deltaInt = elapsedUs ~/ 1000;
-      var current = _counts[deltaInt];
-      if(current == null) current = 0;
-      _counts[deltaInt] = current + 1;
-    }
+    var deltaInt = elapsedUs ~/ 1000;
+    var current = _counts[deltaInt];
+    if(current == null) current = 0;
+    _counts[deltaInt] = current + 1;
   }
 
   void _addItem() {
