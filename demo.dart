@@ -15,6 +15,7 @@
 library demo;
 
 import 'dart:async';
+import 'dart:collection';
 import 'dart:html';
 import 'package:box2d/box2d_browser.dart';
 
@@ -22,6 +23,13 @@ import 'package:box2d/box2d_browser.dart';
  * An abstract class for any Demo of the Box2D library.
  */
 abstract class Demo {
+  static const _QUEUE_SIZE = 100;
+  final Queue<num> _stepTimes = new Queue<num>();
+  num _stepTimeRunningAverage = 0;
+
+  num get avgStepTime => _stepTimes.isEmpty ?
+      0 : _stepTimeRunningAverage ~/ _stepTimes.length;
+
   /** All of the bodies in a simulation. */
   List<Body> bodies = new List<Body>();
 
@@ -90,6 +98,18 @@ abstract class Demo {
     world.drawDebugData();
     frameCount++;
 
+    if(_stepTimes.length >= _QUEUE_SIZE) {
+      _stepTimeRunningAverage -= _stepTimes.removeFirst();
+    }
+
+    if(_stepTimes.length < _QUEUE_SIZE) {
+      _stepTimes.add(elapsedUs);
+      _stepTimeRunningAverage += elapsedUs;
+    }
+
+    assert(_stepTimes.length <= _QUEUE_SIZE);
+
+
     window.requestAnimationFrame(step);
   }
 
@@ -123,8 +143,7 @@ abstract class Demo {
       frameCount = 0;
     });
     new Timer.periodic(new Duration(milliseconds: 200), (Timer t) {
-      if (elapsedUs == null) return;
-      worldStepTime.innerHtml = "${elapsedUs / 1000} ms";
+      worldStepTime.innerHtml = "${avgStepTime / 1000} ms";
     });
   }
 
