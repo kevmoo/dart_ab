@@ -24,9 +24,10 @@ library vector_math;
 import 'dart:typed_data';
 import 'dart:math' as Math;
 
-part 'src/vector_math/angle.dart';
+part 'src/vector_math/utilities.dart';
 part 'src/vector_math/aabb2.dart';
 part 'src/vector_math/aabb3.dart';
+part 'src/vector_math/colors.dart';
 part 'src/vector_math/constants.dart';
 part 'src/vector_math/error_helpers.dart';
 part 'src/vector_math/frustum.dart';
