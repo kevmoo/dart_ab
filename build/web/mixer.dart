@@ -25,6 +25,10 @@ class MixerTest extends Demo {
 
   final FixtureDef _ballFixture;
   final math.Random _rnd;
+  final List<Body> _bouncers = new List<Body>();
+  final SplayTreeMap<int, int> _counts = new SplayTreeMap<int, int>();
+
+  int _fastFrameCount = 0;
 
   MixerTest(this._ballFixture)
       : _rnd = new math.Random(),
@@ -33,7 +37,6 @@ class MixerTest extends Demo {
 
   @override
   void initialize() {
-
     var sd = new PolygonShape();
     sd.setAsBox(50.0, 0.4);
 
@@ -44,7 +47,6 @@ class MixerTest extends Demo {
     //
     // Rotating thing
     //
-
     var numPieces = 6;
     var radius = 50;
     bd = new BodyDef()
@@ -84,77 +86,35 @@ class MixerTest extends Demo {
     world.createJoint(rjd);
   }
 
-  // TODO(kevmoo) all of these fields should move to the top
-  static const _QUEUE_SIZE = 100;
-  final List<Body> _bouncers = new List<Body>();
-  final Queue<num> _stepTimes = new Queue<num>();
-  final SplayTreeMap<int, int> _counts = new SplayTreeMap<int, int>();
-
-  int _stepCounter = 0;
-  int _fastFrameCount = 0;
-  num _lastUpdate = 0;
-  num _stepTimeRunningAverage = 0;
-
   @override
   void step(num timeStamp) {
-
-    var delta = timeStamp - _lastUpdate;
-    _lastUpdate = timeStamp;
-
-    if(_stepTimes.length >= _QUEUE_SIZE) {
-      _stepTimeRunningAverage -= _stepTimes.removeFirst();
-    }
-
-    if(_stepTimes.length < _QUEUE_SIZE) {
-      if (delta != null) {
-        _stepTimes.add(delta);
-        _stepTimeRunningAverage += delta;
-      }
-    }
-
-    assert(_stepTimes.length <= _QUEUE_SIZE);
-
-    var avgframe = null;
-    if (_stepTimes.isNotEmpty) {
-      avgframe = _stepTimeRunningAverage / _stepTimes.length;
-
-      if (avgframe < 17) {
-        _fastFrameCount++;
-        if (_fastFrameCount > 5) {
-          _fastFrameCount = 0;
-          _addItem();
-        }
-      } else if (avgframe > 18) {
-        _fastFrameCount = 0;
-        if (_bouncers.length > 1) {
-          world.destroyBody(_bouncers.removeAt(0));
-        }
-      } else {
-        _fastFrameCount = 0;
-      }
-    }
-
     super.step(timeStamp);
+
+    var avgFrame = super.avgStepTime;
+
+    if (avgFrame < 7000) {
+      _fastFrameCount++;
+    } else if (avgFrame > 8000) {
+      _fastFrameCount = 0;
+      if (_bouncers.length > 1) {
+        world.destroyBody(_bouncers.removeAt(0));
+      }
+    }
+
+    if(_fastFrameCount > 5) {
+      _fastFrameCount = 0;
+      _addItem();
+    }
 
     ctx.fillStyle = 'black';
     ctx.font = '30px Arial';
     ctx.textAlign = 'right';
     ctx.fillText('${_bouncers.length} items', 150, 30);
 
-    // don't start recording delta's until we have a full queue
-    if(delta != null && _stepTimes.length == _QUEUE_SIZE) {
-
-      // Track jank
-
-      var deltaInt = delta.toInt();
-      var current = _counts[deltaInt];
-      if(current == null) current = 0;
-      _counts[deltaInt] = current + 1;
-
-      //ctx.font = '10px Arial';
-      //ctx.textAlign = 'left';
-      //ctx.fillText(_counts.toString(), 0, 500);
-    }
+    var deltaInt = elapsedUs ~/ 1000;
+    var current = _counts[deltaInt];
+    if(current == null) current = 0;
+    _counts[deltaInt] = current + 1;
   }
 
   void _addItem() {
@@ -187,7 +147,6 @@ class MixerTest extends Demo {
     windowContext['_chartData'] = jsData;
 
     js.context.callMethod('updateChart');
-
   }
 }
 
